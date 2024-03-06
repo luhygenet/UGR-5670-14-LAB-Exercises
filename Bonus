@@ -1,0 +1,39 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+
+void main(List<String> args) {
+  final List<String> urls = [
+    'https://example.com/file1.txt',
+    'https://example.com/file2.txt',
+    'https://example.com/file3.txt',
+  ];
+
+  downloadFiles(urls);
+}
+
+Future<void> downloadFiles(List<String> urls) async {
+  final List<Future<void>> downloadFutures = [];
+
+  for (final url in urls) {
+    downloadFutures.add(_downloadFile(url));
+  }
+
+  await Future.wait(downloadFutures);
+  print('All files downloaded successfully!');
+}
+
+Future<void> _downloadFile(String url) async {
+  final httpClient = http.Client();
+  final file = File('${url.split('/').last}');
+
+  try {
+    final response = await httpClient.get(Uri.parse(url));
+    await file.writeAsBytes(response.bodyBytes);
+  } catch (e) {
+    print('Error downloading ${file.path}: $e');
+  } finally {
+    httpClient.close();
+  }
+}
