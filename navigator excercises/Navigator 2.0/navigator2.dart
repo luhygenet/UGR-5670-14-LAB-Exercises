@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quotes/courseApp.dart'; // Import the Course class from the correct location
+import 'package:quotes/courseApp.dart';
 
 void main() {
   runApp(
